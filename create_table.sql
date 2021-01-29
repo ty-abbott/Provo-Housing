@@ -75,7 +75,7 @@ CREATE TABLE Flag
 
 CREATE TABLE HousingUnitHasCertification
 (
-  HousingUnitID SERIAL NOT NULL,
+  HousingUnitID INT NOT NULL,
   CertificationID INT NOT NULL,
   PRIMARY KEY (HousingUnitID, CertificationID),
   FOREIGN KEY (HousingUnitID) REFERENCES HousingUnit(HousingUnitID),
