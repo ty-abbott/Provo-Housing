@@ -1,4 +1,4 @@
-CREATE TABLE User
+CREATE TABLE "User"
 (
   UserID SERIAL NOT NULL,
   email VARCHAR NOT NULL,
@@ -9,16 +9,16 @@ CREATE TABLE User
   UNIQUE (email)
 );
 
-CREATE TABLE HousingUnit
+CREATE TABLE "HousingUnit"
 (
   HousingUnitID SERIAL NOT NULL,
   description VARCHAR NOT NULL,
   UserID INT NOT NULL,
   PRIMARY KEY (HousingUnitID),
-  FOREIGN KEY (UserID) REFERENCES User(UserID)
+  FOREIGN KEY (UserID) REFERENCES "User"(UserID)
 );
 
-CREATE TABLE Listing
+CREATE TABLE "Listing"
 (
   ListingID SERIAL NOT NULL,
   dateListed DATE NOT NULL,
@@ -27,10 +27,10 @@ CREATE TABLE Listing
   message VARCHAR NOT NULL,
   HousingUnitID INT NOT NULL,
   PRIMARY KEY (ListingID),
-  FOREIGN KEY (HousingUnitID) REFERENCES HousingUnit(HousingUnitID)
+  FOREIGN KEY (HousingUnitID) REFERENCES "HousingUnit"(HousingUnitID)
 );
 
-CREATE TABLE Certification
+CREATE TABLE "Certification"
 (
   CertificationID SERIAL NOT NULL,
   description VARCHAR NOT NULL,
@@ -38,17 +38,17 @@ CREATE TABLE Certification
   PRIMARY KEY (CertificationID)
 );
 
-CREATE TABLE Photo
+CREATE TABLE "Photo"
 (
   PhotoID SERIAL NOT NULL,
   URL VARCHAR NOT NULL,
   HousingUnitID INT NOT NULL,
   PRIMARY KEY (PhotoID),
-  FOREIGN KEY (HousingUnitID) REFERENCES HousingUnit(HousingUnitID),
+  FOREIGN KEY (HousingUnitID) REFERENCES "HousingUnit"(HousingUnitID),
   UNIQUE (URL)
 );
 
-CREATE TABLE Rating
+CREATE TABLE "Rating"
 (
   RatingID SERIAL NOT NULL,
   stars INT NOT NULL,
@@ -56,11 +56,11 @@ CREATE TABLE Rating
   HousingUnitID INT NOT NULL,
   UserID INT NOT NULL,
   PRIMARY KEY (RatingID),
-  FOREIGN KEY (HousingUnitID) REFERENCES HousingUnit(HousingUnitID),
-  FOREIGN KEY (UserID) REFERENCES User(UserID)
+  FOREIGN KEY (HousingUnitID) REFERENCES "HousingUnit"(HousingUnitID),
+  FOREIGN KEY (UserID) REFERENCES "User"(UserID)
 );
 
-CREATE TABLE Flag
+CREATE TABLE "Flag"
 (
   FlagID SERIAL NOT NULL,
   reason VARCHAR NOT NULL,
@@ -68,16 +68,16 @@ CREATE TABLE Flag
   RatingID INT,
   UserID INT NOT NULL,
   PRIMARY KEY (FlagID),
-  FOREIGN KEY (ListingID) REFERENCES Listing(ListingID),
-  FOREIGN KEY (RatingID) REFERENCES Rating(RatingID),
-  FOREIGN KEY (UserID) REFERENCES User(UserID)
+  FOREIGN KEY (ListingID) REFERENCES "Listing"(ListingID),
+  FOREIGN KEY (RatingID) REFERENCES "Rating"(RatingID),
+  FOREIGN KEY (UserID) REFERENCES "User"(UserID)
 );
 
-CREATE TABLE HousingUnitHasCertification
+CREATE TABLE "HousingUnitHasCertification"
 (
   HousingUnitID INT NOT NULL,
   CertificationID INT NOT NULL,
   PRIMARY KEY (HousingUnitID, CertificationID),
-  FOREIGN KEY (HousingUnitID) REFERENCES HousingUnit(HousingUnitID),
-  FOREIGN KEY (CertificationID) REFERENCES Certification(CertificationID)
+  FOREIGN KEY (HousingUnitID) REFERENCES "HousingUnit"(HousingUnitID),
+  FOREIGN KEY (CertificationID) REFERENCES "Certification"(CertificationID)
 );
