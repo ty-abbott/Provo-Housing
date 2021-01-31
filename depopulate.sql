@@ -28,6 +28,9 @@ BEGIN
 	AND UserID = user_id;
 	/* Depends: UserID, HousingUnitID */
 
+	DELETE FROM "HousingUnitHasCertification"
+	WHERE HousingUnitID = housing_unit_id;
+
 	DELETE FROM "Flag"
 	WHERE UserID = user_id;
 
@@ -37,17 +40,14 @@ BEGIN
 	DELETE FROM "Photo"
 	WHERE HousingUnitID = housing_unit_id;
 
-	DELETE FROM "HousingUnitHasCertification"
-	WHERE HousingUnitID = housing_unit_id;
+	DELETE FROM "Certification"
+	WHERE CertificationID = certification_id;
 
 	DELETE FROM "Listing"
 	WHERE ListingID = listing_id;
 
 	DELETE FROM "HousingUnit"
 	WHERE HousingUnitID = housing_unit_id;
-
-	DELETE FROM "Certification"
-	WHERE CertificationID = certification_id;
 
 	DELETE FROM "User"
 	WHERE UserID = user_id;
