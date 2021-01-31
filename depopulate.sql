@@ -1,35 +1,56 @@
-DELETE FROM "User"
-WHERE email = 'buttocks@buttocks.org'
-AND password = 'notanactualhash'
-AND isAdmin = FALSE
-AND isLandlord = TRUE;
+DO $$
 
-DELETE FROM "HousingUnit"
-WHERE description = 'A house';
+	DECLARE user_id INT;
+	DECLARE housing_unit_id INT;
+	DECLARE listing_id INT;
+	DECLARE certification_id INT;
+	DECLARE rating_id INT;
+BEGIN
 
-DELETE FROM "Listing"
-WHERE dateExpires = date '2021-02-05'
-AND price_in_cents = 74999
-AND message = 'We are listing!';
+	SELECT UserID INTO user_id FROM "User"
+	WHERE email = 'something@classy.org';
+	/* raw strings */
 
-DELETE FROM "Certification"
-WHERE description = 'a cert'
-AND certManagerContact = 'call 123-456-7890';
+	SELECT HousingUnitID INTO housing_unit_id FROM "HousingUnit"
+	WHERE UserID = user_id;
+	/* Depends: UserID, HousingUnitID */
 
-DELETE FROM "Photo"
-WHERE URL = 'example.com';
+	SELECT ListingID INTO listing_id FROM "Listing"
+	WHERE HousingUnitID = housing_unit_id;
+	/* Depends: UserID, HousingUnitID */
 
-DELETE FROM "Rating"
-WHERE stars = 2
-AND text = 'not great';
+	SELECT CertificationID INTO certification_id FROM "Certification"
+	WHERE description = 'a cert';
+	/* raw strings */
 
-DELETE FROM "Flag"
-WHERE reason = 'it bad';
+	SELECT RatingID INTO rating_id FROM "Rating"
+	WHERE HousingUnitID = housing_unit_id
+	AND UserID = user_id;
+	/* Depends: UserID, HousingUnitID */
 
-DELETE FROM "Flag"
-WHERE reason = 'it bad too';
+	DELETE FROM "Flag"
+	WHERE UserID = user_id;
 
-DELETE FROM "HousingUnitHasCertification"
-WHERE HousingUnitID, CertificationID)
-VALUES (housing_unit_id, certification_id);
+	DELETE FROM "Rating"
+	WHERE RatingID = rating_id;
 
+	DELETE FROM "Photo"
+	WHERE HousingUnitID = housing_unit_id;
+
+	DELETE FROM "HousingUnitHasCertification"
+	WHERE HousingUnitID = housing_unit_id;
+
+	DELETE FROM "Listing"
+	WHERE ListingID = listing_id;
+
+	DELETE FROM "HousingUnit"
+	WHERE HousingUnitID = housing_unit_id;
+
+	DELETE FROM "Certification"
+	WHERE CertificationID = certification_id;
+
+	DELETE FROM "User"
+	WHERE UserID = user_id;
+
+END;
+$$;

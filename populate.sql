@@ -8,7 +8,7 @@ DO $$
 BEGIN
 
 	INSERT INTO "User" (email, password, isAdmin, isLandlord)
-	VALUES ('buttocks@buttocks.org', 'notanactualhash', FALSE, TRUE)
+	VALUES ('something@classy.org', 'notanactualhash', FALSE, TRUE)
 	RETURNING UserID INTO user_id;
 
 	INSERT INTO "HousingUnit" (description, UserID)
