@@ -1,0 +1,72 @@
+
+Login Page
+
+User.UserID
+User.email
+User.password
+User.isAdmin
+User.isLandlord
+
+Register Page
+
+User.UserID
+User.email
+User.password
+User.isAdmin
+User.isLandlord
+
+Search Listings
+
+Listing.ListingID
+Listing.price_in_cents
+HousingUnit.description
+Photo.URL
+Certification.description
+Rating.stars
+
+---need housing unit address---
+
+Upload Housing Unit
+
+HousingUnit.HousingUnitID
+HousingUnit.description
+HousingUnit.UserID
+
+Recent User Flags
+
+Flag.FlagID
+Flag.reason
+Flag.ListingID?
+Flag.RatingID
+Flag.UserID
+
+---Flag.creation_date---
+
+
+View Housing/Listing page
+
+
+Listing.ListingID
+Listing.price_in_cents
+Listing.dateListed
+Listing.dateExpires
+HousingUnit.description
+Photo.URL
+Certification.description
+Rating.stars
+---need housing unit address---
+
+
+View Your Housings/Listings
+
+Listing.ListingID
+Listing.price_in_cents
+Listing.dateListed
+Listing.dateExpires
+HousingUnit.description
+Photo.URL
+Certification.description
+Rating.stars
+
+---need housing unit name?---
+---need housing unit address---
