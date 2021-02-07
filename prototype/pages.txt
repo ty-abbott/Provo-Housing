@@ -24,6 +24,7 @@ Photo.URL
 Certification.description
 Rating.stars
 
+
 ---need housing unit address---
 
 Upload Housing Unit
