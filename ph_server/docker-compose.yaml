@@ -1,0 +1,79 @@
+version: "3.7"
+services:
+  db:
+    container_name: ph_postgres
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment: 
+      POSTGRES_DB: provohousing
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  
+
+  postgrest:
+    container_name: ph_postgrest
+    image: postgrest/postgrest
+    ports:
+      - "8000:3000"
+    links:
+      - db:db
+    environment:
+      PGRST_DB_URI: postgres://app_user:${POSTGRES_PASSWORD}@db:5432/provohousing
+      PGRST_DB_SCHEMA: public
+      PGRST_DB_ANON_ROLE: app_user #In production this role should not be the same as the one used for the connection
+      PGRST_SERVER_PROXY_URI: "http://127.0.0.1:8000"
+    depends_on:
+      - db
+  # mariadb:
+  #   container_name: pcs-mariadb
+  #   image: mariadb
+  #   volumes:
+  #     - mariadb:/var/lib/mysql
+  #   ports:
+  #     - 3306:3306
+  #   restart: always
+  #   environment:
+  #     MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+  #     MYSQL_ROOT_PASSWORD: toor
+
+  #     MYSQL_USER: ${DB_USERNAME}
+  #     MYSQL_PASSWORD: ${DB_PASSWORD}
+  #     MYSQL_DATABASE: ${DB_DATABASE}
+
+  # phpmyadmin:
+  #   container_name: pcs-phpmyadmin
+  #   image: phpmyadmin/phpmyadmin
+  #   depends_on:
+  #     - mariadb
+  #   restart: always
+  #   ports:
+  #     - 8080:80
+  #   environment:
+  #     PMA_HOST: mariadb
+  #     MYSQL_ROOT_PASSWORD: toor
+
+  # serve:
+  #   container_name: pcs-serve
+  #   build: ./docker/serve
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - .:/root
+  #   env_file:
+  #     - .env
+
+  # build:
+  #   container_name: pcs-build
+  #   image: "node:alpine"
+  #   working_dir: /home/node/app
+  #   volumes:
+  #     - ./:/home/node/app
+  #     # - .:/root
+  #   command: "yarn run watch"
+  #   env_file:
+  #     - .env
+
+volumes:
+  mariadb:
