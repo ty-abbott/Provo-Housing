@@ -25,6 +25,8 @@ services:
       PGRST_SERVER_PROXY_URI: "http://127.0.0.1:8000"
     depends_on:
       - db
- 
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
 volumes:
-  - "./pgdata:/var/lib/postgresql/data"
+  pgdata:
