@@ -1,4 +1,5 @@
 import React from 'react'
+import env from "react-dotenv"
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -13,14 +14,14 @@ class CreateHousing extends React.Component {
       address = `${address}${event.target.address2.value}\n`
     }
     address = `${address}${event.target.address3.value}, ${event.target.address4.value} ${event.target.address5.value}`
-    
+
     let body = {
       name: event.target.name.value,
       address: address,
       description: event.target.description.value,
-      userid: 1
+      userid: 1 // FIXME
     }
-    fetch('http://localhost:8000/HousingUnit', {
+    fetch(`http://${env.DB_HOST}/HousingUnit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

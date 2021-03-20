@@ -1,4 +1,5 @@
 import React from 'react'
+import env from "react-dotenv"
 
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -25,7 +26,7 @@ class CreateListing extends React.Component {
       housingunitid: this.state.housingunit.housingunitid
     }
     console.log(body)
-    fetch('http://localhost:8000/Listing', {
+    fetch(`http://${env.DB_HOST}/Listing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ class CreateListing extends React.Component {
       window.location.href = "/view_housing"
       return
     }
-    fetch(`http://localhost:8000/HousingUnit?housingunitid=eq.${query.get('housingunitid')}`).then(response => response.json()).then(json => {
+    fetch(`http://${env.DB_HOST}/HousingUnit?housingunitid=eq.${query.get('housingunitid')}`).then(response => response.json()).then(json => {
       console.log(json)
       if (json.length === 0) {
         console.error('bad housing')
