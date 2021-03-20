@@ -25,7 +25,6 @@ class CreateListing extends React.Component {
       message: event.target.message.value,
       housingunitid: this.state.housingunit.housingunitid
     }
-    console.log(body)
     fetch(`http://${env.DB_HOST}/Listing`, {
       method: 'POST',
       headers: {
@@ -40,21 +39,16 @@ class CreateListing extends React.Component {
   componentDidMount(prevProps, prevState, snapshot) {
     let query = new URLSearchParams(window.location.search)
     if (!query.get('housingunitid')) {
-      console.error('no housing')
       window.location.href = "/view_housing"
       return
     }
     fetch(`http://${env.DB_HOST}/HousingUnit?housingunitid=eq.${query.get('housingunitid')}`).then(response => response.json()).then(json => {
-      console.log(json)
       if (json.length === 0) {
-        console.error('bad housing')
         window.location.href = "/view_housing"
         return
       }
       this.setState({ housingunit: json[0] })
-      console.log(this.state)
     }).catch(err => {
-      console.error(err)
       window.location.href = "/view_housing"
     })
   }
