@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
+import env from "react-dotenv"
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class Login extends React.Component {
     console.log(this.state)
   }
   componentDidMount(){
-    if (this.state.email != "" && this.state.password != "")
+    if (this.state.email !== "" && this.state.password !== "")
     {
       console.log("Ready for the credential check!")
       var requestOptions = {
@@ -30,12 +32,11 @@ class Login extends React.Component {
         redirect: 'follow'
       };
       var fetchStmt = `http://${env.DB_HOST}/User?email=eq.${this.state.email}`
-      var obj = ""
       fetch(fetchStmt, requestOptions)
         .then(response => response.json())
         .then(json => {
         console.log(json)
-        this.state.dbPassword = json[0].password
+        this.setState({dbPassword: json[0].password})
         /* etc */
         }).catch(error => {console.error('some error', error)})
       console.log("userpass: ", this.state.dbPassword)
@@ -47,7 +48,7 @@ class Login extends React.Component {
   }
   passCheck()
   {
-    if ((this.state.password === this.state.dbPassword) && (this.state.password != "")) {
+    if ((this.state.password === this.state.dbPassword) && (this.state.password !== "")) {
       console.log("ALL LOGGED IN")
       window.location.href = '/Search'
     } else {

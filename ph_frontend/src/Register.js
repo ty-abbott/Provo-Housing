@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
+import env from "react-dotenv"
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class Register extends React.Component {
     this.componentDidMount()
   }
   componentDidMount() {
-    if (this.state.email != "" && this.state.password != "") 
+    if (this.state.email !== "" && this.state.password !== "") 
     {
       console.log("WE MADE IT!!!")
       var myHeaders = new Headers();
