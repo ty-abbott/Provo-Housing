@@ -10,6 +10,13 @@ import About from "./About"
 import Dashboard from "./Dashboard"
 import Register from "./Register"
 import Login from "./Login"
+
+import CreateHousing from "./CreateHousing"
+import ViewHousing from "./ViewHousing"
+import CreateListing from "./CreateListing"
+import 'bootstrap/dist/css/bootstrap.min.css'
+import "./App.css"
+import Container from "react-bootstrap/Container"
 // import Login from "./Login"
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -43,6 +50,9 @@ export default function BasicExample() {
           <li>
             <Link to="/login">Login</Link>
           </li>
+          <li>
+            <Link to="/view_housing">View Your Housing Units</Link>
+          </li>
         </ul>
         <hr />
         {/*
@@ -52,13 +62,18 @@ export default function BasicExample() {
           you have multiple routes, but you want only one
           of them to render at a time
         */}
-        <Switch>
-          <Route exact path="/"> <Home /> </Route>
-          <Route path="/about"> <About /> </Route>
-          <Route path="/dashboard"> <Dashboard /> </Route>
-          <Route path="/register"> <Register /> </Route>
-          <Route path="/login"> <Login /> </Route>
-        </Switch>
+        <Container>
+          <Switch>
+            <Route exact path="/"> <Home /> </Route>
+            <Route path="/about"> <About /> </Route>
+            <Route path="/dashboard"> <Dashboard /> </Route>
+            <Route path="/register"> <Register /> </Route>
+            <Route path="/login"> <Login /> </Route>
+            <Route exact path="/create_housing"> <CreateHousing /> </Route>
+            <Route exact path="/view_housing"> <ViewHousing /> </Route>
+            <Route exact path="/create_listing"> <CreateListing /> </Route>
+          </Switch>
+        </Container>
       </div>
     </Router>
   )
