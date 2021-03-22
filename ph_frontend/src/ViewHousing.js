@@ -6,6 +6,11 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+
+import {
+  Link
+} from "react-router-dom"
+
 class CreateHousing extends React.Component {
   constructor(props) {
     super(props)
@@ -80,7 +85,7 @@ class CreateHousing extends React.Component {
             <Col>
               {!house.listingid &&
                 <div>
-                  <Button href={`create_listing?housingunitid=${house.housingunitid}`}>Publish This Housing Unit</Button>
+                  <Link to={`create_listing?housingunitid=${house.housingunitid}`}>Publish This Housing Unit</Link>
                 </div>
               }
               {house.listingid &&
@@ -104,7 +109,7 @@ class CreateHousing extends React.Component {
     return (
       <div>
         <h1>Your Housing Units</h1>
-        <Button href="/create_housing">Create New Housing Unit</Button>
+        <Link to="/create_housing">Create New Housing Unit</Link>
         <ul>{dispHouses}</ul>
       </div >
     )
