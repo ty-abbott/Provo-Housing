@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import env from "react-dotenv"
 
 import Card from 'react-bootstrap/Card'
@@ -6,12 +6,15 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+import UserContext from "./UserContext"
+
 
 import {
   Link
 } from "react-router-dom"
 
 function CreateHousing() {
+  const { user } = useContext(UserContext)
   // const history = useHistory()
   const [houses, setHouses] = useState([]);
 
@@ -59,9 +62,8 @@ function CreateHousing() {
   }
 
   function updateHousingUnits() {
-    let userid = 1 // FIXME
+    let userid = user.userid // FIXME
     fetch(`http://${env.DB_HOST}/housingunitswithlistings?userid=eq.${userid}`).then(response => response.json()).then(json => {
-      console.log(json)
       setHouses(json)
     })
   }

@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import env from "react-dotenv"
+
+import UserContext from "./UserContext"
 
 function Register() {
   const history = useHistory()
 
   function doRegister(event) {
     event.preventDefault()
+    if (event.target.password.value !== event.target.password_c.value) {
+      window.alert('Passwords must match')
+      return
+    }
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
@@ -23,10 +29,11 @@ function Register() {
     };
     fetch(`http://${env.DB_HOST}/User`, requestOptions)
       .then(response => {
-        if (response.ok)
-        history.push('/login')
-        else
-        alert('username taken')
+        if (response.ok) {
+          history.push('/create_housing')
+        } else {
+          alert('username taken')
+        }
       })
       .catch(error => console.error('error', error));
   }
@@ -39,7 +46,10 @@ function Register() {
         <input name="email" id="email" />
         <br></br>
         <label>Password</label>
-        <input type="password" name="password" id="password" />
+        <input type="password" name="password" />
+        <br></br>
+        <label>Password (Again)</label>
+        <input type="password" name="password_c" />
         <br></br>
         <button type="submit">Go!</button>
       </form>

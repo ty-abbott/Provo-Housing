@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import env from "react-dotenv"
 
+import UserContext from "./UserContext"
+
 function Login() {
+  const { setUser } = useContext(UserContext)
   const history = useHistory()
 
   function doLogin(event) {
@@ -10,8 +13,8 @@ function Login() {
     fetch(`http://${env.DB_HOST}/User?email=eq.${event.target.email.value}`)
       .then(response => response.json())
       .then(json => {
-        console.log(json)
         if (event.target.password.value === json[0].password) {
+          setUser(json[0])
           history.push('/view_housing')
           return
         }

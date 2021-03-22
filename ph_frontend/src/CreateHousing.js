@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import env from "react-dotenv"
 import { useHistory } from "react-router-dom";
 
@@ -6,7 +6,10 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
+import UserContext from "./UserContext"
+
 function CreateHousing() {
+  const { user } = useContext(UserContext)
   const history = useHistory()
 
   function createUnit(event) {
@@ -22,7 +25,7 @@ function CreateHousing() {
       name: event.target.name.value,
       address: address,
       description: event.target.description.value,
-      userid: 1 // FIXME
+      userid: user.userid
     }
     fetch(`http://${env.DB_HOST}/HousingUnit`, {
       method: 'POST',
