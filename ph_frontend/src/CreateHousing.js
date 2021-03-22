@@ -1,5 +1,6 @@
 import React from 'react'
 import env from "react-dotenv"
+import { useHistory } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -28,7 +29,8 @@ class CreateHousing extends React.Component {
       },
       body: JSON.stringify(body)
     }).then(response => {
-      window.location.href = '/view_housing'
+      this.props.history.push('/view_housing')
+      // window.location.href = '/view_housing'
     })
   }
 

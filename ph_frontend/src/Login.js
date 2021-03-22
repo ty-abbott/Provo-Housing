@@ -21,7 +21,8 @@ class Login extends React.Component {
             email: event.target.email.value,
             password: event.target.password.value
           })
-          window.location = "/view_housing"
+          this.props.history.push('/view_housing')
+          // window.location = "/view_housing"
           return
         }
         alert('Wrong password')

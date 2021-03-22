@@ -32,24 +32,28 @@ class CreateListing extends React.Component {
       },
       body: JSON.stringify(body)
     }).then(response => {
-      window.location.href = '/view_housing'
+      this.props.history.push('/view_housing')
+      // window.location.href = '/view_housing'
     })
   }
 
   componentDidMount(prevProps, prevState, snapshot) {
     let query = new URLSearchParams(window.location.search)
     if (!query.get('housingunitid')) {
-      window.location.href = "/view_housing"
+      // window.location.href = "/view_housing"
+      this.props.history.push('/view_housing')
       return
     }
     fetch(`http://${env.DB_HOST}/HousingUnit?housingunitid=eq.${query.get('housingunitid')}`).then(response => response.json()).then(json => {
       if (json.length === 0) {
-        window.location.href = "/view_housing"
+        this.props.history.push('/view_housing')
+        // window.location.href = "/view_housing"
         return
       }
       this.setState({ housingunit: json[0] })
     }).catch(err => {
-      window.location.href = "/view_housing"
+      this.props.history.push('/view_housing')
+      // window.location.href = "/view_housing"
     })
   }
 
