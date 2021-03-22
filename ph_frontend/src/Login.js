@@ -36,8 +36,11 @@ class Login extends React.Component {
         .then(response => response.json())
         .then(json => {
         console.log(json)
-        this.state.dbPassword = json[0].password
-        /* etc */
+          if (this.state.password === json[0].password) {
+            window.location = "/Search"
+            return
+          }
+          alert('Wrong password')
         }).catch(error => {console.error('some error', error)})
       console.log("userpass: ", this.state.dbPassword)
     }
