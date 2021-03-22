@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import env from "react-dotenv"
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +40,7 @@ class Register extends React.Component {
         body: raw,
         redirect: 'follow'
       };
-      fetch("http://localhost:8000/User", requestOptions)
+      fetch(`http://${env.DB_HOST}/User`, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));

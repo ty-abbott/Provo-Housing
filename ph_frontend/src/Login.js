@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import env from "react-dotenv"
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +30,7 @@ class Login extends React.Component {
         method: 'GET',
         redirect: 'follow'
       };
-      var fetchStmt = "http://localhost:8000/User?email=eq." + this.state.email
+      var fetchStmt = `http://${env.DB_HOST}/User?email=eq.${this.state.email}`
       var obj = ""
       fetch(fetchStmt, requestOptions)
         .then(response => response.json())
