@@ -38,12 +38,6 @@ export default function BasicExample() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li>
             <Link to="/register">Register</Link>
           </li>
           <li>
@@ -64,8 +58,6 @@ export default function BasicExample() {
         <Container>
           <Switch>
             <Route exact path="/"> <Login /> </Route>
-            <Route path="/about"> <About /> </Route>
-            <Route path="/dashboard"> <Dashboard /> </Route>
             <Route path="/register"> <Register /> </Route>
             <Route path="/login"> <Login /> </Route>
             <Route exact path="/create_housing"> <CreateHousing /> </Route>
