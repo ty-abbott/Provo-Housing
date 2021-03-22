@@ -1,72 +1,49 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import env from "react-dotenv"
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: ''
-    }
-    this.updateState = this.updateState.bind(this)
-  }
-  updateState(event) {
+
+function Register() {
+  const history = useHistory()
+
+  function doRegister(event) {
     event.preventDefault()
-    console.log(event.target.email.value)
-    console.log(event.target.password.value)
-    console.log("YEET.")
-    console.log(this.state)
-    this.setState({
-      email: event.target.email.value,
-      password: event.target.password.value
-    })
-    console.log(this.state)
-    this.componentDidMount()
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "email": event.target.email.value,
+      "password": event.target.password.value,
+      "isadmin": false,
+      "islandlord": false
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    fetch(`http://${env.DB_HOST}/User`, requestOptions)
+      .then(response => {
+        if (response.ok)
+        history.push('/login')
+        else
+        alert('username taken')
+      })
+      .catch(error => console.error('error', error));
   }
-  componentDidMount() {
-    if (this.state.email != "" && this.state.password != "") 
-    {
-      console.log("WE MADE IT!!!")
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      var raw = JSON.stringify({
-        "email":this.state.email,
-        "password":this.state.password,
-        "isadmin":false,
-        "islandlord":false
-      });
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      };
-      fetch(`http://${env.DB_HOST}/User`, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-    } 
-    else 
-    {
-      console.log("Waiting for full post request...")
-    }    
-  }
-  render() {
-    console.log(this.state)
-    this.componentDidMount()
-    return (
-      <div>
-          <form onSubmit={this.updateState}>
-            <h1>Register</h1>
-            <label>Email</label>
-            <input name="email" id="email"/>
-            <br></br>
-            <label>Password</label>
-            <input type="password" name="password" id="password"/>
-            <br></br>
-            <button type="submit">Go!</button>
-          </form>
-      </div> 
-    );
-  }
+
+  return (
+    <div>
+      <form onSubmit={doRegister}>
+        <h1>Register</h1>
+        <label>Email</label>
+        <input name="email" id="email" />
+        <br></br>
+        <label>Password</label>
+        <input type="password" name="password" id="password" />
+        <br></br>
+        <button type="submit">Go!</button>
+      </form>
+    </div>
+  );
 }
 export default Register
