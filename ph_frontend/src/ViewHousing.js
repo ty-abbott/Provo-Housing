@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react';
 import env from "react-dotenv"
 
 import Card from 'react-bootstrap/Card'
@@ -6,30 +6,33 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
-class CreateHousing extends React.Component {
-  constructor(props) {
-    super(props)
+import UserContext from "./UserContext"
 
-    this.state = { houses: [] }
-  }
 
-  componentDidMount(prevProps, prevState, snapshot) {
-    this.updateHousingUnits()
-  }
+import {
+  Link
+} from "react-router-dom"
 
-  unpublish(listingid) {
+function CreateHousing() {
+  const { user } = useContext(UserContext)
+  // const history = useHistory()
+  const [houses, setHouses] = useState([]);
+
+  useEffect(updateHousingUnits, [user.userid])
+
+  function unpublish(listingid) {
     fetch(`http://${env.DB_HOST}/Flag?listingid=eq.${listingid}`, {
       method: 'DELETE'
     }).then(response => {
       fetch(`http://${env.DB_HOST}/Listing?listingid=eq.${listingid}`, {
         method: 'DELETE'
       }).then(response => {
-        this.updateHousingUnits()
+        updateHousingUnits()
       })
     })
   }
 
-  async delete(housingunitid) {
+  async function deleteHouse(housingunitid) {
     await fetch(`http://${env.DB_HOST}/Photo?housingunitid=eq.${housingunitid}`, {
       method: 'DELETE'
     })
@@ -53,19 +56,20 @@ class CreateHousing extends React.Component {
     await fetch(`http://${env.DB_HOST}/HousingUnit?housingunitid=eq.${housingunitid}`, {
       method: 'DELETE'
     })
-    this.updateHousingUnits()
+    updateHousingUnits()
   }
 
-  updateHousingUnits() {
-    let userid = 1 // FIXME
+  function updateHousingUnits() {
+    let userid = user.userid
     fetch(`http://${env.DB_HOST}/housingunitswithlistings?userid=eq.${userid}`).then(response => response.json()).then(json => {
-      this.setState({ houses: json })
+      setHouses(json)
     })
   }
 
-  render() {
-    const dispHouses = this.state.houses.map((house) =>
-      <Card key={house.housingunitid}>
+  const dispHouses = houses.map((house) =>
+    <Card key={house.housingunitid}>
+
+      {house.listingid ?
         <Card.Body>
           <Card.Title>
             {house.name}
@@ -74,41 +78,54 @@ class CreateHousing extends React.Component {
             {house.address}
           </Card.Subtitle>
           <Card.Text>
-            {house.description}
+            <p>{house.description}</p>
+            <hr />
+            <h4>This house is currently listed</h4>
+            <p>Listed on {house.datelisted}</p>
+            <p>Set to expire on {house.dateexpires}</p>
+            <p>Price: ${house.price_in_cents / 100}</p>
+            <p>{house.message}</p>
           </Card.Text>
           <Row>
             <Col>
-              {!house.listingid &&
-                <div>
-                  <Button href={`create_listing?housingunitid=${house.housingunitid}`}>Publish This Housing Unit</Button>
-                </div>
-              }
-              {house.listingid &&
-                <div>
-                  <Button variant="warning" onClick={() => this.unpublish(house.listingid)}>Unpublish This Housing Unit</Button>
-                </div>
-              }
+              <Button variant="warning" onClick={() => unpublish(house.listingid)}>Unpublish This Housing Unit</Button>
             </Col>
             <Col>
-              {!house.listingid &&
-                <Button variant="danger" onClick={() => this.delete(house.housingunitid)}>Delete this Housing Unit</Button>
-              }
-              {house.listingid &&
-                <Button variant="danger" onClick={() => this.delete(house.housingunitid)} disabled>Delete this Housing Unit</Button>
-              }
+              <Button variant="danger" onClick={() => deleteHouse(house.housingunitid)} disabled>Delete this Housing Unit</Button>
             </Col>
           </Row>
         </Card.Body>
-      </Card>
-    )
-    return (
-      <div>
-        <h1>Your Housing Units</h1>
-        <Button href="/create_housing">Create New Housing Unit</Button>
-        <ul>{dispHouses}</ul>
-      </div >
-    )
-  }
+        :
+        <Card.Body>
+          <Card.Title>
+            {house.name}
+          </Card.Title>
+          <Card.Subtitle>
+            {house.address}
+          </Card.Subtitle>
+          <Card.Text>
+            <p>{house.description}</p>
+          </Card.Text>
+          <Row>
+            <Col>
+              <Link to={`create_listing?housingunitid=${house.housingunitid}`}>Publish This Housing Unit</Link>
+            </Col>
+            <Col>
+              <Button variant="danger" onClick={() => deleteHouse(house.housingunitid)}>Delete this Housing Unit</Button>
+            </Col>
+          </Row>
+        </Card.Body>
+      }
+    </Card>
+  )
+
+  return (
+    <div>
+      <h1>Your Housing Units</h1>
+      <Link to="/create_housing">Create New Housing Unit</Link>
+      <ul>{dispHouses}</ul>
+    </div >
+  )
 }
 
 export default CreateHousing

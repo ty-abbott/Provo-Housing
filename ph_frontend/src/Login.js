@@ -1,78 +1,40 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import env from "react-dotenv"
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password:'',
-      dbPassword: ''
-    }
-    this.updateState = this.updateState.bind(this)
-  }
-  updateState(event) {
+import UserContext from "./UserContext"
+
+function Login() {
+  const { setUser } = useContext(UserContext)
+  const history = useHistory()
+
+  function doLogin(event) {
     event.preventDefault()
-    console.log(event.target.email.value)
-    console.log(event.target.password.value)
-    console.log("YEET.")
-    console.log(this.state)
-    this.setState({
-      email: event.target.email.value,
-      password: event.target.password.value
-    })
-    console.log(this.state)
+    fetch(`http://${env.DB_HOST}/User?email=eq.${event.target.email.value}`)
+      .then(response => response.json())
+      .then(json => {
+        if (event.target.password.value === json[0].password) {
+          setUser(json[0])
+          history.push('/view_housing')
+          return
+        }
+        alert('Wrong password')
+      }).catch(error => { console.error('some error', error) })
   }
-  componentDidMount(){
-    if (this.state.email !== "" && this.state.password !== "")
-    {
-      console.log("Ready for the credential check!")
-      var requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
-      var fetchStmt = `http://${env.DB_HOST}/User?email=eq.${this.state.email}`
-      fetch(fetchStmt, requestOptions)
-        .then(response => response.json())
-        .then(json => {
-        console.log(json)
-        this.setState({dbPassword: json[0].password})
-        /* etc */
-        }).catch(error => {console.error('some error', error)})
-      console.log("userpass: ", this.state.dbPassword)
-    }
-    else
-    {
-      console.log("Waiting on credentials...")
-    }
-  }
-  passCheck()
-  {
-    if ((this.state.password === this.state.dbPassword) && (this.state.password !== "")) {
-      console.log("ALL LOGGED IN")
-      window.location.href = '/Search'
-    } else {
-      console.log("Still need more info")
-    }
-  }
-  render() {
-    console.log(this.state)
-    this.componentDidMount()
-    this.passCheck()
-    return (
-      <div>
-          <form onSubmit={this.updateState}>
-            <h1>Login</h1>
-            <label>Email</label>
-            <input name="email" id="email"/>
-            <br></br>
-            <label>Password</label>
-            <input type="password" name="password" id="password"/>
-            <br></br>
-            <button type="submit">Go!</button>
-          </form>
-      </div>
-    );
-  }
+
+  return (
+    <div>
+      <form onSubmit={doLogin}>
+        <h1>Login</h1>
+        <label>Email</label>
+        <input name="email" id="email" />
+        <br></br>
+        <label>Password</label>
+        <input type="password" name="password" />
+        <br></br>
+        <button type="submit">Go!</button>
+      </form>
+    </div>
+  );
 }
 export default Login
