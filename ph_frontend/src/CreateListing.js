@@ -17,8 +17,9 @@ function CreateListing() {
     event.preventDefault()
 
     let now = new Date()
+    let datelisted = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
     let body = {
-      datelisted: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+      datelisted: datelisted,
       dateexpires: event.target.dateexpires.value,
       price_in_cents: event.target.price_in_dollars.value * 100,
       message: event.target.message.value,
@@ -31,6 +32,7 @@ function CreateListing() {
       },
       body: JSON.stringify(body)
     }).then(response => {
+      // listing creaetd, go see it
       history.push('/view_housing')
     })
   }
@@ -38,17 +40,17 @@ function CreateListing() {
   function getHousingUnit() {
     let query = new URLSearchParams(window.location.search)
     if (!query.get('housingunitid')) {
-      history.push('/view_housing')
+      history.goBack()
       return
     }
     fetch(`http://${env.DB_HOST}/HousingUnit?housingunitid=eq.${query.get('housingunitid')}`).then(response => response.json()).then(json => {
       if (json.length === 0) {
-        history.push('/view_housing')
+        history.goBack()
         return
       }
       setHouse(json[0])
     }).catch(err => {
-      history.push('/view_housing')
+      history.goBack()
     })
   }
 
