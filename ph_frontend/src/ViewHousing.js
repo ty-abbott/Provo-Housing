@@ -18,9 +18,7 @@ function CreateHousing() {
   // const history = useHistory()
   const [houses, setHouses] = useState([]);
 
-  useEffect(() => {
-    updateHousingUnits()
-  }, [])
+  useEffect(updateHousingUnits, [user.userid])
 
   function unpublish(listingid) {
     fetch(`http://${env.DB_HOST}/Flag?listingid=eq.${listingid}`, {
@@ -62,7 +60,7 @@ function CreateHousing() {
   }
 
   function updateHousingUnits() {
-    let userid = user.userid // FIXME
+    let userid = user.userid
     fetch(`http://${env.DB_HOST}/housingunitswithlistings?userid=eq.${userid}`).then(response => response.json()).then(json => {
       setHouses(json)
     })
@@ -70,39 +68,54 @@ function CreateHousing() {
 
   const dispHouses = houses.map((house) =>
     <Card key={house.housingunitid}>
-      <Card.Body>
-        <Card.Title>
-          {house.name}
-        </Card.Title>
-        <Card.Subtitle>
-          {house.address}
-        </Card.Subtitle>
-        <Card.Text>
-          {house.description}
-        </Card.Text>
-        <Row>
-          <Col>
-            {!house.listingid &&
-              <div>
-                <Link to={`create_listing?housingunitid=${house.housingunitid}`}>Publish This Housing Unit</Link>
-              </div>
-            }
-            {house.listingid &&
-              <div>
-                <Button variant="warning" onClick={() => unpublish(house.listingid)}>Unpublish This Housing Unit</Button>
-              </div>
-            }
-          </Col>
-          <Col>
-            {!house.listingid &&
-              <Button variant="danger" onClick={() => deleteHouse(house.housingunitid)}>Delete this Housing Unit</Button>
-            }
-            {house.listingid &&
+
+      {house.listingid ?
+        <Card.Body>
+          <Card.Title>
+            {house.name}
+          </Card.Title>
+          <Card.Subtitle>
+            {house.address}
+          </Card.Subtitle>
+          <Card.Text>
+            <p>{house.description}</p>
+            <hr />
+            <h4>This house is currently listed</h4>
+            <p>Listed on {house.datelisted}</p>
+            <p>Set to expire on {house.dateexpires}</p>
+            <p>Price: ${house.price_in_cents / 100}</p>
+            <p>{house.message}</p>
+          </Card.Text>
+          <Row>
+            <Col>
+              <Button variant="warning" onClick={() => unpublish(house.listingid)}>Unpublish This Housing Unit</Button>
+            </Col>
+            <Col>
               <Button variant="danger" onClick={() => deleteHouse(house.housingunitid)} disabled>Delete this Housing Unit</Button>
-            }
-          </Col>
-        </Row>
-      </Card.Body>
+            </Col>
+          </Row>
+        </Card.Body>
+        :
+        <Card.Body>
+          <Card.Title>
+            {house.name}
+          </Card.Title>
+          <Card.Subtitle>
+            {house.address}
+          </Card.Subtitle>
+          <Card.Text>
+            <p>{house.description}</p>
+          </Card.Text>
+          <Row>
+            <Col>
+              <Link to={`create_listing?housingunitid=${house.housingunitid}`}>Publish This Housing Unit</Link>
+            </Col>
+            <Col>
+              <Button variant="danger" onClick={() => deleteHouse(house.housingunitid)}>Delete this Housing Unit</Button>
+            </Col>
+          </Row>
+        </Card.Body>
+      }
     </Card>
   )
 

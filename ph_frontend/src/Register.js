@@ -1,8 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 import env from "react-dotenv"
 
-import UserContext from "./UserContext"
 
 function Register() {
   const history = useHistory()

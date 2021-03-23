@@ -11,7 +11,7 @@ function CreateListing() {
   const history = useHistory()
   const [house, setHouse] = useState(null);
 
-  useEffect(getHousingUnit, [])
+  useEffect(getHousingUnit, [history])
 
   function createListing(event) {
     event.preventDefault()
