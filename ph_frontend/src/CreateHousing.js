@@ -34,6 +34,7 @@ function CreateHousing() {
       },
       body: JSON.stringify(body)
     }).then(response => {
+      // housing created, go see it
       history.push('/view_housing')
     })
   }

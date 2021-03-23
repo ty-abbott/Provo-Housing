@@ -13,8 +13,10 @@ function Listings() {
   useEffect(getListings, [filter])
 
   function getListings() {
-    let url = `http://${env.DB_HOST}/housingunitswithlistings?and=(listingid.not.is.null)`
-    // let url = `http://${env.DB_HOST}/housingunitswithlistings?and=(listingid.not.is.null,dateexpires.gt.2020-03-23)`
+    // let url = `http://${env.DB_HOST}/housingunitswithlistings?and=(listingid.not.is.null)`
+    let now = new Date()
+    let date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+    let url = `http://${env.DB_HOST}/housingunitswithlistings?and=(listingid.not.is.null,dateexpires.gt.${date})`
     if (filter) {
       url = `http://${env.DB_HOST}/housingunitswithlistings?and=(listingid.not.is.null,or(name.ilike.*${filter}*,message.ilike.*${filter}*,address.ilike.*${filter}*,description.ilike.*${filter}*))`
     }
@@ -28,13 +30,8 @@ function Listings() {
     setFilter(event.target.filter.value.toLowerCase())
   }
 
-  let listing_to_disp = listings
-  // if (filter) {
-  //   listing_to_disp = listing_to_disp.filter((listing) => {
-  //     return listing.name.toLowerCase().includes(filter) || listing.message.toLowerCase().includes(filter) || listing.address.toLowerCase().includes(filter) || listing.description.toLowerCase().includes(filter)
-  //   })
-  // }
-  const dispListings = listing_to_disp.map((listing) =>
+  console.log(listings)
+  const dispListings = listings.map((listing) =>
     <Card key={listing.housingunitid}>
       <Card.Body>
         <Card.Title>

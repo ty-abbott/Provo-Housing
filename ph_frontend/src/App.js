@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 import {
   BrowserRouter as Router,
@@ -6,12 +6,24 @@ import {
   Route,
   Link
 } from "react-router-dom"
+
+// login
 import Register from "./Register"
 import Login from "./Login"
 
+// user
+import ViewListings from "./ViewListings"
+import ViewListing from "./ViewListing"
+import CreateFlagForListing from "./CreateFlagForListing"
+
+// landlord
 import CreateHousing from "./CreateHousing"
 import ViewHousing from "./ViewHousing"
 import CreateListing from "./CreateListing"
+
+// admin
+import ViewFlags from "./ViewFlags"
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "./App.css"
 import Container from "react-bootstrap/Container"
@@ -69,12 +81,13 @@ export default function BasicExample() {
     <Router>
       <div>
         <ul>
-          <li>
-            <Link to="/view_housing">View Your Housing Units</Link>
-          </li>
-          <li>
-            <Link to="/login" onClick={() => {setUser(undefined)}}>Log Out</Link>
-          </li>
+          {/* landlord */}
+          {user.islandlord && <li> <Link to="/view_housing">View Your Housing Units</Link> </li>}
+          {/* admin */}
+          {user.isadmin && <li> <Link to="/view_flags">View Reported Listings</Link> </li>}
+          {/* all */}
+          <li> <Link to="/">View Listings</Link> </li>
+          <li> <Link to="/login" onClick={() => { setUser(undefined) }}>Log Out</Link> </li>
         </ul>
         <hr />
         {/*
@@ -87,9 +100,16 @@ export default function BasicExample() {
         <UserContext.Provider value={value}>
           <Container>
             <Switch>
-              <Route exact path="/create_housing"> <CreateHousing /> </Route>
-              <Route exact path="/view_housing"> <ViewHousing /> </Route>
-              <Route exact path="/create_listing"> <CreateListing /> </Route>
+              {/* landlord */}
+              {user.islandlord && <Route exact path="/create_housing"> <CreateHousing /> </Route>}
+              {user.islandlord && <Route exact path="/view_housing"> <ViewHousing /> </Route>}
+              {user.islandlord && <Route exact path="/create_listing"> <CreateListing /> </Route>}
+              {/* admin */}
+              {user.isadmin && <Route exact path="/view_flags"> <ViewFlags /> </Route>}
+              {/* all */}
+              <Route exact path="/"> <ViewListings /> </Route>
+              <Route exact path="/view_listing"> <ViewListing /> </Route>
+              <Route exact path="/report_listing"> <CreateFlagForListing /> </Route>
             </Switch>
           </Container>
         </UserContext.Provider>

@@ -29,7 +29,8 @@ function Register() {
     fetch(`http://${env.DB_HOST}/User`, requestOptions)
       .then(response => {
         if (response.ok) {
-          history.push('/create_housing')
+          // user created, go log in
+          history.push('/')
         } else {
           alert('username taken')
         }

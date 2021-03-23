@@ -58,7 +58,7 @@ function ReportListing() {
     <div>
       {house &&
         <div>
-          <h1>Rent Housing Unit?</h1>
+          <h1>Report Listing?</h1>
           <Card key={house}>
             <Card.Body>
               <Card.Title>

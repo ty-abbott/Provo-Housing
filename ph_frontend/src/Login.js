@@ -13,12 +13,17 @@ function Login() {
     fetch(`http://${env.DB_HOST}/User?email=eq.${event.target.email.value}`)
       .then(response => response.json())
       .then(json => {
-        if (event.target.password.value === json[0].password) {
-          setUser(json[0])
-          history.push('/view_housing')
+        if (!json[0]) {
+          // wrong username
+          alert('Wrong password')
           return
         }
-        alert('Wrong password')
+        if (event.target.password.value !== json[0].password) {
+          alert('Wrong password')
+          return
+        }
+        setUser(json[0])
+        history.push('/')
       }).catch(error => { console.error('some error', error) })
   }
 
